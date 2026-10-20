@@ -1,0 +1,52 @@
+# Required Notice: Copyright Matthew Armstrong (https://github.com/The-Dorkknight)
+# Licensed under the PolyForm Noncommercial License 1.0.0. No warranty.
+#
+# On every push to main (and on a v* tag, and by hand): make a GitHub Release with the PDF attached
+# if the version in paper/VERSION has no release yet, and publish docs/ (the paper as a web page).
+# This workflow has not been run on GitHub yet.
+name: Publish
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Make the release if this version has none
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER=$(tr -d '[:space:]' < paper/VERSION)
+          TAG="v$VER"
+          if gh release view "$TAG" >/dev/null 2>&1; then echo "Release $TAG already exists"; exit 0; fi
+          mkdir dist
+          cp "paper/a-point-of-contention-v$VER.pdf" dist/
+          (cd dist && sha256sum *.pdf > SHA256SUMS.txt)
+          printf 'The paper *A POINT of contention* version %s as a PDF. The same text is the repository front page and the web page. Nothing in it has been run in real FreeCAD, Fusion or a slicer.\n' "$VER" > notes.md
+          gh release create "$TAG" dist/* --title "A POINT of contention v$VER" --notes-file notes.md --target "$GITHUB_SHA"
+  pages:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+        continue-on-error: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deploy
+        uses: actions/deploy-pages@v4

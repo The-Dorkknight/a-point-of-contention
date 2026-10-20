@@ -1,0 +1,24 @@
+name: Test result, correction or prior art
+description: You tried the files, found a mistake in the paper, or know of earlier work
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is this?
+      options: [Test result (slicer / FreeCAD / Fusion), Mistake in the paper, Prior art I missed, Something else]
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Program and version, or the section of the paper
+      placeholder: "PrusaSlicer 2.9 on macOS 14 / section 6 table"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, or what is wrong
+      description: Photos of broken meshes are welcome. Please don't attach models you aren't allowed to share.
+    validations:
+      required: true

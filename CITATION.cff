@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this format or paper, please cite it as below."
+title: "A POINT of contention: STL to STEP conversion shouldn't be that HARD. A proposed hybrid STL format that is CAD-friendly and slicer-compatible"
+type: article
+authors:
+  - family-names: Armstrong
+    given-names: Matthew
+repository-code: "https://github.com/The-Dorkknight/a-point-of-contention"
+url: "https://The-Dorkknight.github.io/a-point-of-contention/"
+abstract: "A normal binary STL that also records which CAD face each triangle came from, what kind of surface it is, and where its corners are, so slicers still open it and mesh-to-CAD converters no longer have to guess. Includes a defensive publication of the format."
+keywords:
+  - stl
+  - step
+  - cad
+  - freecad
+  - fusion-360
+  - file-format
+  - defensive-publication
+license: CC-BY-SA-4.0
+version: "1.0"
+date-released: 2026-10-15
